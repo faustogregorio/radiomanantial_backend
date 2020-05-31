@@ -1,0 +1,19 @@
+{
+  "name": "radiomanantial",
+  "version": "1.0.0",
+  "description": "Radio Manantial Backend API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "author": "Fausto Gregorio",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
