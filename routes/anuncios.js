@@ -17,7 +17,8 @@ const {
   getAnuncioContenido,
   updateAnuncioContenido,
   getAnuncioRedesSociales,
-  updateAnuncioRedesSociales
+  updateAnuncioRedesSociales,
+  getVisitas
 } = require("../controllers/anuncios");
 const router = express.Router();
 
@@ -38,5 +39,5 @@ router.route("/contenido/:id").get(getAnuncioContenido).put(protect, updateAnunc
 router.route("/redes-sociales/:id").get(getAnuncioRedesSociales).put(protect, updateAnuncioRedesSociales);
 
 router.route("/:id").get(getAnuncio).delete(protect, deleteAnuncio);
-
+router.route("/visitas/:id").get(getVisitas);
 module.exports = router;

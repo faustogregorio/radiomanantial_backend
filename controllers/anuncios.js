@@ -58,13 +58,46 @@ exports.getAnuncios = (req, res, next) => {
 //@access           Public
 exports.getAnuncio = (req, res, next) => {
   const anuncioId = req.params.id;
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log('IP: ', ip);
   sql.query(
-    `SELECT * FROM anunciantes WHERE idAnunciante=${anuncioId}`,
+    `INSERT INTO visitas VALUES (${anuncioId},'${ip}', now())`,
+    function (error, results, fields) {
+      if (error);
+      sql.query(
+        `SELECT 
+    nombre_html as nombreHTML,
+    logo,
+    foto,
+    contenido_html as contenidoHTML 
+    FROM anunciantes WHERE idAnunciante=${anuncioId}`,
+        function (error, results, fields) {
+          if (error) next(error);
+          res.status(200).json({
+            success: true,
+            data: results[0],
+          });
+        }
+      );
+    }
+  );
+};
+
+//@description      Get anuncio visitas
+//@route            GET /api/v1/anuncios/visitas/:id
+//@access           Public
+exports.getVisitas = (req, res, next) => {
+  const anuncioId = req.params.id;
+
+  sql.query(
+    `
+    SELECT COUNT(idAnunciante) as visitas FROM visitas WHERE idAnunciante=${anuncioId}
+    `,
     function (error, results, fields) {
       if (error) next(error);
-      res.status(201).json({
+      res.status(200).json({
         success: true,
-        data: results,
+        data: results[0],
       });
     }
   );
@@ -76,7 +109,10 @@ exports.getAnuncio = (req, res, next) => {
 exports.getAnuncioRedesSociales = (req, res, next) => {
   const idAnunciante = req.params.id;
   sql.query(
-    `SELECT idRedSocial as id, url FROM anunciantes_redes_sociales WHERE idAnunciante=${idAnunciante};`,
+    `SELECT ars.idRedSocial as id, url, logo
+    FROM anunciantes_redes_sociales as ars 
+    inner join redes_sociales as rs 
+    on ars.idRedSocial=rs.idRedSocial WHERE idAnunciante=${idAnunciante};`,
     function (error, results, fields) {
       if (error) next(error);
 
@@ -100,8 +136,8 @@ exports.updateAnuncioRedesSociales = (req, res, next) => {
     function (error, results, fields) {
       if (error) next(error);
       let valuesRedesSociales = "";
-      
-      let ids = []; 
+
+      let ids = [];
       for (let index = 0; index < redesSociales.length; index++) {
         if (!ids.includes(redesSociales[index].id)) {
           ids.push(redesSociales[index].id);
@@ -151,6 +187,8 @@ exports.getAnuncioContenido = (req, res, next) => {
 exports.updateAnuncioContenido = (req, res, next) => {
   const idAnunciante = req.params.id;
   const { contenidoHTML, contenidoJSON } = req.body;
+  console.log("HTML", contenidoHTML);
+  console.log("JSON", contenidoJSON);
 
   sql.query(
     `UPDATE anunciantes SET contenido_json='${contenidoJSON}', contenido_html='${contenidoHTML}' WHERE idAnunciante=${idAnunciante};`,

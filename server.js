@@ -1,17 +1,17 @@
-
-const path = require('path');
+const path = require("path");
 const express = require("express");
+const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
-const morgan = require('morgan');
-const fileupload = require('express-fileupload');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const xss = require('xss-clean');
-const rateLimit = require('express-rate-limit');
-const hpp = require('hpp');
-const cors = require('cors');
-const errorHandler = require('./middleware/error');
-const connection = require('./config/db');
+const morgan = require("morgan");
+const fileupload = require("express-fileupload");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
+const cors = require("cors");
+const errorHandler = require("./middleware/error");
+const connection = require("./config/db");
 
 //load env vars
 dotenv.config({ path: "./config/config.env" });
@@ -20,10 +20,10 @@ dotenv.config({ path: "./config/config.env" });
 connection;
 
 // Route files
-const anuncios = require('./routes/anuncios');
-const imagenesPrincipales = require('./routes/imagenPrincipal');
-const auth = require('./routes/auth');
-
+const anuncios = require("./routes/anuncios");
+const imagenesPrincipales = require("./routes/imagenPrincipal");
+const auth = require("./routes/auth");
+const modulos = require("./routes/modulos");
 
 const app = express();
 
@@ -34,8 +34,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Dev logging middleware
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
 }
 
 // File uploading
@@ -48,11 +48,11 @@ app.use(helmet());
 //app.use(xss());
 
 // Rate limiting
-/* const limiter = rateLimit({
+const limiter = rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minitos
-    max: 100
+    max: 1000
 });
-app.use(limiter); */
+app.use(limiter);
 
 // Prevent http param pollution
 app.use(hpp());
@@ -61,12 +61,14 @@ app.use(hpp());
 app.use(cors());
 
 // Set static folder
-app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(express.static(path.join(__dirname, "public")));
 
 //Mount routers
-app.use('/api/v1/anuncios', anuncios);
-app.use('/api/v1/imagenes-principales', imagenesPrincipales);
-app.use('/api/v1/auth', auth);
+app.use("/api/v1/anuncios", anuncios);
+app.use("/api/v1/imagenes-principales", imagenesPrincipales);
+app.use("/api/v1/auth", auth);
+app.use("/api/v1/modulos", modulos);
 
 app.use(errorHandler);
 
@@ -80,8 +82,8 @@ const server = app.listen(
 );
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-    console.log(`Error: ${err.message}`);
-    // Close server & exit process
-    server.close(() => process.exit(1));
+process.on("unhandledRejection", (err, promise) => {
+  console.log(`Error: ${err.message}`);
+  // Close server & exit process
+  server.close(() => process.exit(1));
 });
