@@ -4,7 +4,7 @@
   "description": "Radio Manantial Backend API",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
+    "start": "node .",
     "dev": "nodemon server"
   },
   "author": "Fausto Gregorio",
