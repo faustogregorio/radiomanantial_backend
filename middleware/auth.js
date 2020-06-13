@@ -25,7 +25,7 @@ exports.protect = async (req, res, next) => {
 
   try {
     // Veridy token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, 'ramadinanotial');
     console.log(decoded);
 
     sql.query(`SELECT role FROM users WHERE idUser=${decoded.id}`, function (

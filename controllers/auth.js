@@ -19,9 +19,9 @@ exports.registerUser = async (req, res, next) => {
 
       const token = jwt.sign(
         { id: results["insertId"] },
-        process.env.JWT_SECRET,
+        'ramadinanotial',
         {
-          expiresIn: process.env.JWT_EXPIRE,
+          expiresIn: '30d',
         }
       );
 
@@ -81,13 +81,13 @@ exports.login = async (req, res, next) => {
 
 // Create cookie and send response
 const sendTokenResponse = (idUser, statusCode, res) => {
-  const token = jwt.sign({ id: idUser }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
+  const token = jwt.sign({ id: idUser }, 'ramadinanotial', {
+    expiresIn: '30d',
   });
 
   const options = {
     expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+      Date.now() + 30 * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
   };

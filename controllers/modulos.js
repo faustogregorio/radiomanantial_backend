@@ -145,7 +145,7 @@ exports.getModulo = (req, res, next) => {
 
 function saveFile(file) {
   try {
-    fs.writeFileSync(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, file.data);
+    fs.writeFileSync(`./public/uploads/${file.name}`, file.data);
     console.log(`File ${file.name} has been saved.`);
   } catch (error) {
     console.error(error);
@@ -154,7 +154,7 @@ function saveFile(file) {
 
 function deleteFile(nombre) {
   try {
-    fs.unlinkSync(`${process.env.FILE_UPLOAD_PATH}/${nombre}`);
+    fs.unlinkSync(`./public/uploads/${nombre}`);
     console.log(`File ${nombre} deleted!`);
   } catch (error) {
     console.error(`File ${nombre} not deleted!, it maybe not exist`);

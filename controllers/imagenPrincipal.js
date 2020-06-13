@@ -81,7 +81,7 @@ exports.createImagenPrincipal = (req, res, next) => {
   console.log(req.files);
 
   fs.writeFile(
-    `${process.env.FILE_UPLOAD_PATH}/${file.name}`,
+    `./public/uploads/${file.name}`,
     file.data,
     function (err) {
       if (err) return next(err);
@@ -107,7 +107,7 @@ exports.deleteImagenPrincipal = (req, res, next) => {
   const id = req.params.id.split("__")[0];
   const nombre = req.params.id.split("__")[1];
   console.log(req.params.id);
-  fs.unlink(`${process.env.FILE_UPLOAD_PATH}/${nombre}`, function (err) {
+  fs.unlink(`./public/uploads/${nombre}`, function (err) {
     if (err) return next(err);
     // if no error, file has been deleted successfully
     sql.query(`DELETE FROM imagen_principal WHERE idImagen=${id}`, function (

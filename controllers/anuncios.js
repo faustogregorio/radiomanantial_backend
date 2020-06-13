@@ -354,7 +354,7 @@ exports.updateAnuncioLogo = (req, res, next) => {
   deleteFile(logo);
 
   fs.writeFile(
-    `${process.env.FILE_UPLOAD_PATH}/${file.name}`,
+    `./public/uploads/${file.name}`,
     file.data,
     function (err) {
       if (err) return next(err);
@@ -415,7 +415,7 @@ exports.updateAnuncioImagenPrincipal = (req, res, next) => {
   deleteFile(foto);
 
   fs.writeFile(
-    `${process.env.FILE_UPLOAD_PATH}/${file.name}`,
+    `./public/uploads/${file.name}`,
     file.data,
     function (err) {
       if (err) return next(err);
@@ -562,46 +562,10 @@ exports.deleteAnuncio = (req, res, next) => {
   });
 };
 
-//@description      Upload photo for anuncio
-//@route            PUT /api/v1/anuncios/:id/photo
-//@access           Private
-/* exports.anuncioPhotoUpload = (req, res, next) => {
-  const anuncioId = req.params.id;
-  if (!req.files) {
-    return next(new Error(`Please upload a file`));
-  }
-  console.log(req.files);
-
-  const file = req.files.file;
-  // Make sure the image is a photo
-  if (!file.mimetype.startsWith("image")) {
-    return next(new Error(`Please upload an image file`));
-  }
-
-  // Create custom filename
-  file.name = `photo_${anuncioId}${path.parse(file.name).ext}`;
-  console.log(file.name);
-
-  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
-    if (err) return next(err);
-    sql.query(
-      `UPDATE anunciantes 
-        SET
-        foto='${file.name}' WHERE idAnunciante=${anuncioId}`,
-      function (error, results, fields) {
-        if (error) next(error);
-        res.status(200).json({
-          success: true,
-          data: results,
-        });
-      }
-    );
-  });
-}; */
 
 function uploadFile(file) {
   try {
-    fs.writeFileSync(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, file.data);
+    fs.writeFileSync(`./public/uploads/${file.name}`, file.data);
     console.log(`File ${file.name} has been saved.`);
   } catch (error) {
     console.error(error);
@@ -610,7 +574,7 @@ function uploadFile(file) {
 
 function deleteFile(nombre) {
   try {
-    fs.unlinkSync(`${process.env.FILE_UPLOAD_PATH}/${nombre}`);
+    fs.unlinkSync(`./public/uploads/${nombre}`);
     console.log(`File ${nombre} deleted!`);
   } catch (error) {
     console.error(`File ${nombre} not deleted!, it maybe not exist`);
