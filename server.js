@@ -67,7 +67,7 @@ app.use(limiter);
 app.use(hpp());
 
 // Enable CORS
-app.use(cors());
+//app.use(cors());
 
 // Set static folder
 
